@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Tool Database — Guided Web Page</title>
+  <meta name="description" content="Browse the AI Tool Database while listening to an ElevenLabs narration." />
+  <style>
+    :root{
+      --bg:#0f1115; --card:#141826; --muted:#9aa3b2; --text:#e8ecf3;
+      --accent:#6aa6ff; --accent2:#7cf8c8; --border:#22283a; --thead:#0f1424;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#0c0f14,#0f1115 40%);color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
+    .container{max-width:1200px;margin:0 auto;padding:24px}
+    h1{font-size:clamp(24px,4vw,38px);margin:0 0 10px;font-weight:800}
+    p.sub{color:var(--muted);margin:0 0 18px}
+    .card{background:linear-gradient(180deg,#141827,#0f1320);border:1px solid var(--border);
+      border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    .audio{display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:#0e1220;border:1px solid var(--border);
+      padding:12px;border-radius:14px;margin:10px 0 22px}
+    .audio label{font-size:14px;color:var(--muted)}
+    audio{width:100%}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+    .tab{padding:10px 14px;border-radius:999px;border:1px solid var(--border);background:#0f1424;color:var(--text);
+      font-weight:700;cursor:pointer;letter-spacing:.2px}
+    .tab[aria-selected="true"]{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#0b0f16;border-color:transparent}
+    .panel{display:none}
+    .panel.active{display:block}
+    .help{color:var(--muted);font-size:13px}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .col{flex:1 1 420px}
+    .input,.btn,input[type="url"],input[type="text"]{width:100%;padding:12px 14px;border-radius:12px;background:#0c1120;
+      border:1px solid var(--border);color:var(--text);font-size:14px;outline:none}
+    .btn{background:linear-gradient(90deg,#3a66ff,#17d1a8);border:none;font-weight:800;cursor:pointer}
+    iframe,embed{width:100%;min-height:720px;border:1px solid var(--border);border-radius:14px;background:#0a0d17}
+    .table-wrap{overflow:auto;border:1px solid var(--border);border-radius:14px;background:#0a0d17}
+    table{border-collapse:collapse;width:100%;min-width:1000px}
+    th,td{padding:10px 12px;border-bottom:1px solid #1a2033;vertical-align:top}
+    th{position:sticky;top:0;background:var(--thead);color:#c9d2ea;cursor:pointer;white-space:nowrap}
+    tr:hover td{background:#10162a}
+    footer{margin:28px 0 8px;color:#7f8aad;font-size:12px;text-align:center}
+    .kbd{font-family:ui-monospace,Menlo,Monaco,Consolas,"Courier New",monospace;border:1px solid #2b3350;border-bottom-width:2px;background:#0b0f1d;padding:2px 6px;border-radius:6px;color:#b9c7ff}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Tool Database — Guided Web Page</h1>
+    <p class="sub">Listen to the ElevenLabs narration while you browse the database below. Use the PDF viewer, or embed a Google Sheet, or upload a CSV.</p>
+
+    <!-- AUDIO -->
+    <div class="card audio">
+      <label for="audio">Narration</label>
+      <audio id="audio" controls preload="metadata">
+        <!-- Use your existing file name; change to narration.mp3 if you rename -->
+        <source src="ElevenLabs_2025-08-26T20_37_34_Rachel_pre_sp100_s50_sb75_se0_b_m2.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+      <a class="btn" href="ElevenLabs_2025-08-26T20_37_34_Rachel_pre_sp100_s50_sb75_se0_b_m2.mp3" download>Download audio</a>
+    </div>
+
+    <!-- TABS -->
+    <nav class="tabs" role="tablist" aria-label="Views">
+      <button class="tab" id="tab-pdf" role="tab" aria-controls="panel-pdf" aria-selected="true">PDF</button>
+      <button class="tab" id="tab-sheet" role="tab" aria-controls="panel-sheet" aria-selected="false">Google Sheet</button>
+      <button class="tab" id="tab-csv" role="tab" aria-controls="panel-csv" aria-selected="false">CSV Upload</button>
+    </nav>
+
+    <!-- PDF PANEL -->
+    <section class="panel active" id="panel-pdf" role="tabpanel" aria-labelledby="tab-pdf">
+      <div class="card" style="margin-bottom:12px">
+        <p class="help">This embeds <span class="kbd">AI Tool Database.pdf</span>. Keep file names and paths exactly the same (case-sensitive).</p>
+      </div>
+      <div class="table-wrap">
+        <!-- Space in filename is encoded as %20 -->
+        <embed src="AI%20Tool%20Database.pdf" type="application/pdf" />
+      </div>
+    </section>
+
+    <!-- GOOGLE SHEET PANEL -->
+    <section class="panel" id="panel-sheet" role="tabpanel" aria-labelledby="tab-sheet">
+      <div class="card" style="margin-bottom:12px">
+        <div class="row">
+          <div class="col">
+            <label class="help" for="sheetUrl">Paste your published Google Sheet URL
+              (File → Share → <b>Publish to web</b> → Entire document) and click <b>Embed</b>.
+            </label>
+            <input id="sheetUrl" class="input" type="url" placeholder="https://docs.google.com/spreadsheets/d/.../pubhtml" />
+          </div>
+          <div class="col" style="max-width:200px;align-self:flex-end">
+            <button id="embedBtn" class="btn">Embed</button>
+          </div>
+        </div>
+        <p class="help" style="margin-top:8px">Tip: Convert an “/edit” link to “/pubhtml” for a clean embed.</p>
+      </div>
+      <iframe id="sheetFrame" title="AI Tool Database (Google Sheet)" style="min-height:720px"></iframe>
+    </section>
+
+    <!-- CSV PANEL -->
+    <section class="panel" id="panel-csv" role="tabpanel" aria-labelledby="tab-csv">
+      <div class="card" style="margin-bottom:12px">
+        <p class="help">Upload a CSV with columns like: Job Area, AI Tool, Parent Company, Access Type, Problem Solved, How it works, URL, Sector, Integration options, Deployment options, Case studies.</p>
+        <input id="csvFile" type="file" accept=".csv,text/csv" class="input" />
+        <div style="height:10px"></div>
+        <input id="search" type="text" class="input" placeholder="Search all columns…" />
+      </div>
+      <div class="table-wrap">
+        <table aria-label="AI Tool Database">
+          <thead id="thead"></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      Host these three files together (this HTML, the PDF, and the MP3). If you rename files, update the <span class="kbd">src</span> paths.
+    </footer>
+  </div>
+
+  <script>
+    // tabs
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.panel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.setAttribute('aria-selected','false'));
+        panels.forEach(p => p.classList.remove('active'));
+        tab.setAttribute('aria-selected','true');
+        document.getElementById(tab.getAttribute('aria-controls')).classList.add('active');
+      });
+    });
+
+    // sheet embed
+    const sheetUrl = document.getElementById('sheetUrl');
+    const sheetFrame = document.getElementById('sheetFrame');
+    document.getElementById('embedBtn').addEventListener('click', () => {
+      const url = (sheetUrl.value || '').trim();
+      if (!url) { alert('Paste a published Google Sheet URL first.'); return; }
+      let src = url;
+      if (url.includes('/edit')) {
+        src = url.replace('/edit#gid=', '/pubhtml?gid=').replace('/edit', '/pubhtml');
+      }
+      sheetFrame.src = src;
+    });
+
+    // CSV parsing / table / search / sort (lightweight)
+    const csvInput = document.getElementById('csvFile');
+    const thead = document.getElementById('thead');
+    const tbody = document.getElementById('tbody');
+    const search = document.getElementById('search');
+    let headers = [], rows = [], sortKey = null, sortDir = 1;
+
+    csvInput.addEventListener('change', () => {
+      const f = csvInput.files?.[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = e => { parseCSV(e.target.result); render(); };
+      r.readAsText(f);
+    });
+
+    function parseCSV(text){
+      headers = []; rows = [];
+      const out = []; let cur = '', row = []; let q = false;
+      for (let i=0;i<text.length;i++){
+        const ch = text[i], nx = text[i+1];
+        if (ch === '"'){ if (q && nx === '"'){cur+='"'; i++;} else { q = !q; } }
+        else if (ch === ',' && !q){ row.push(cur); cur=''; }
+        else if ((ch === '\n' || ch === '\r') && !q){ if (cur!=='' || row.length){ row.push(cur); out.push(row); row=[]; cur=''; } }
+        else { cur += ch; }
+      }
+      if (cur!=='' || row.length){ row.push(cur); out.push(row); }
+      if (!out.length) return;
+      headers = out[0].map(h => (h||'').trim());
+      for (let r=1;r<out.length;r++){
+        const obj = {};
+        for (let c=0;c<headers.length;c++){ obj[headers[c] || ('Col'+c)] = (out[r][c]||'').trim(); }
+        rows.push(obj);
+      }
+    }
+
+    function render(){
+      thead.innerHTML = '';
+      const tr = document.createElement('tr');
+      headers.forEach(h => {
+        const th = document.createElement('th');
+        th.textContent = h || 'Column';
+        th.title = 'Click to sort';
+        th.addEventListener('click', () => { sortKey===h ? sortDir*=-1 : (sortKey=h, sortDir=1); draw(); });
+        tr.appendChild(th);
+      });
+      thead.appendChild(tr);
+      draw();
+    }
+
+    function draw(){
+      const q = (search.value||'').toLowerCase();
+      let data = rows;
+      if (q) data = data.filter(r => Object.values(r).some(v => (v||'').toLowerCase().includes(q)));
+      if (sortKey){
+        data = data.slice().sort((a,b) => {
+          const va = (a[sortKey]||'').toLowerCase(), vb = (b[sortKey]||'').toLowerCase();
+          return va < vb ? -1*sortDir : va > vb ? 1*sortDir : 0;
+        });
+      }
+      tbody.innerHTML = '';
+      data.forEach(r => {
+        const tr = document.createElement('tr');
+        headers.forEach(h => {
+          const td = document.createElement('td');
+          const val = r[h] || '';
+          if (/^https?:\/\//i.test(val)){
+            const a = document.createElement('a'); a.href = val; a.target = '_blank'; a.rel = 'noopener'; a.textContent = val;
+            a.style.color = 'var(--accent)'; td.appendChild(a);
+          } else { td.textContent = val; }
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+    search.addEventListener('input', draw);
+  </script>
+</body>
+</html>
